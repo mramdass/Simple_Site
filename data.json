@@ -1,0 +1,32 @@
+{
+    "title": "Simple Site",
+    "home": "Navigate Top",
+    "masthead": {
+        "h1": "Simple Site",
+        "h2": "What is nginx-gunicorn-flask anyway?",
+        "btn": "Navigate Down"
+    },
+    "about-section": {
+        "h2": "Why Build This",
+        "text": "This site was created using Python, Flask, Gunicorn, NGINX, and HTML5/CSS3 with Bootstrap 4. This is merely for practice."
+    },
+    "signup-section": {
+        "h2": "Subscribe to receive updates!",
+        "form": "Enter email address...",
+        "btn": "Subscribe"
+    },
+    "contact-section": {
+        "address": "Columbia, MD 21046",
+        "phone": "(000) 000-000",
+        "email": "hello@yourdomain.com"
+    },
+    "social": {
+        "facebook": "https://www.facebook.com",
+        "twitter": "https://www.twitter.com",
+        "github": "https://www.github.com/mramdass"
+    },
+    "footer": {
+        "text": "Copyright \u00A9",
+        "year": "2021"
+    }
+}
