@@ -1,3 +1,5 @@
+![alt tag](https://github.com/mramdass/Simple_Site/blob/main/misc/Capture.PNG)
+
 # Simple_Site
 
 ## Prerequesites
