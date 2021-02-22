@@ -1,0 +1,30 @@
+{
+    "deploy.reloaded": {
+        "packages": [
+            {
+                "name": "site app",
+                "description": "site app",
+                "files": [
+                    "**/*"
+                ],
+                "exclude": [
+                    "**/*.sock",
+                    "**/__pycache__/**"
+                ],
+                "deployOnSave": [ "site folder" ]
+            }
+        ],
+        "targets": [
+            {
+                "type": "sftp",
+                "name": "site folder",
+                "description": "site folder",
+                "dir": "/home/ubuntu/site",
+                "host": "*.*.*.*",
+                "port": 22,
+                "user": "****",
+                "password": "****"
+            }
+        ]
+    }
+}
