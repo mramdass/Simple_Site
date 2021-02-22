@@ -16,14 +16,14 @@ def index():
 	except Exception as e:
 		return e
 
-@app.errorhandler(404)
-def not_found(e):
+@app.errorhandler(Exception)
+def error(e):
 	stripped_data = {
 		'title': data['title'],
 		'home': data['home'],
 		'footer': data['footer']
 	}
-	return render_template('error.html', data=stripped_data, code="404", e=e)
+	return render_template('error.html', data=stripped_data, code=str(e).split(' ')[0], e=e)
 
 if __name__=='__main__':
 	app.run(debug=True,host='0.0.0.0')
