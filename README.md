@@ -2,7 +2,7 @@
 
 # Simple_Site
 
-## Prerequesites
+## Prerequisite
 
 To replicate my efforts on Windows 10 host machine...
 1. Obtain VMware Workstation Player on Windows 10 host machine
