@@ -33,10 +33,15 @@ site
     |    |----js
     |         |----scripts.js
     |----templates
+    |    |----security
+    |         |----email
+    |         |----login_user.html
+    |         |----register_user.html
     |    |----index.html
     |    |----error.html
     |----app.py
     |----data.json
+    |----config.json
     |----wsgi.py
 ```
 
