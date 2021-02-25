@@ -1,6 +1,16 @@
 {
-    "title": "Simple Site",
-    "home": "Navigate Top",
+    "head": {
+        "title": "Simple Site"
+    },
+    "navigation": {
+        "btn": "Menu",
+        "home": "Navigate Top",
+        "li-1": "Home",
+        "li-2": "Dashboard",
+        "li-3": "Sign In",
+        "li-4": "Sign Up",
+        "li-5": "Sign Out"
+    },
     "masthead": {
         "h1": "Simple Site",
         "h2": "What is nginx-gunicorn-flask anyway?",
@@ -10,15 +20,27 @@
         "h2": "Why Build This",
         "text": "This site was created using Python, Flask, Gunicorn, NGINX, and HTML5/CSS3 with Bootstrap 4. This is merely for practice."
     },
+    "signin-section": {
+        "h2": "Sign In",
+        "email": "Enter email address...",
+        "password": "Enter password...",
+        "btn": "Sign In",
+        "checkbox": "Remember Me"
+    },
     "signup-section": {
-        "h2": "Subscribe to receive updates!",
-        "form": "Enter email address...",
-        "btn": "Subscribe"
+        "h2": "Create your account now!",
+        "input-1": "Enter name...",
+        "input-2": "Enter email address...",
+        "input-3": "Enter password...",
+        "btn": "Sign Up"
     },
     "contact-section": {
-        "address": "Columbia, MD 21046",
-        "phone": "(000) 000-000",
-        "email": "hello@yourdomain.com"
+        "div-1": "Columbia, MD 21046",
+        "div-2": "(000) 000-000",
+        "div-3": "hello@yourdomain.com",
+        "h4-1": "Address",
+        "h4-2": "Phone",
+        "h4-3": "Email"
     },
     "social": {
         "facebook": "https://www.facebook.com",

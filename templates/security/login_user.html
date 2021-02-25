@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% from "security/_macros.html" import render_field_with_errors, render_field %}
+
+{% block content %}
+<!-- Signin-->
+<section class="signin-section" id="signin">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 col-lg-8 mx-auto text-center">
+                <i class="far fa-paper-plane fa-2x mb-2 text-white"></i>
+                <h2 class="text-white mb-5">{{ data['signin-section']['h2'] }}</h2>
+                <form class="form-inline d-flex" method="POST" action="{{ url_for_security('login') }}" name="login_user_form">
+                    {{ login_user_form.hidden_tag() }}
+                    {{ render_field_with_errors(login_user_form.email, class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0", id="inputEmail", placeholder=data['signin-section']['email'], text="") }}
+                    {{ render_field_with_errors(login_user_form.password, class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0", id="inputPassword", placeholder=data['signin-section']['password']) }}
+                    {{ render_field_with_errors(login_user_form.remember, class="text-white mb-5 checkbox") }}
+                    {{ render_field(login_user_form.submit, class="btn btn-primary mx-auto") }}
+                </form>
+                {% include "security/_menu.html" %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

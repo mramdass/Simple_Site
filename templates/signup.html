@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Signup-->
+<section class="signup-section" id="signup">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 col-lg-8 mx-auto text-center">
+                <i class="far fa-paper-plane fa-2x mb-2 text-white"></i>
+                <h2 class="text-white mb-5">{{ data['signup-section']['h2'] }}</h2>
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <div class="text-white mb-5 notification is-danger">
+                    {{ messages[0] }}. Go to <a href="{{ url_for('security.login') }}">login page</a>.
+                </div>
+                {% endif %}
+                {% endwith %}
+                <form class="form-inline d-flex" method="POST" action="/signup">
+                    <input class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="inputName" name="inputName" type="text" placeholder="{{ data['signup-section']['input-1'] }}" />
+                    <input class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="inputEmail" name="inputEmail" type="email" placeholder="{{ data['signup-section']['input-2'] }}" />
+                    <input class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="inputPassword" name="inputPassword" type="password" placeholder="{{ data['signup-section']['input-3'] }}" />
+                    <button class="btn btn-primary mx-auto" type="submit">{{ data['signup-section']['btn'] }}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
