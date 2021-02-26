@@ -18,6 +18,32 @@
 
 {% if current_user.is_authenticated %}
 <!-- Projects-->
+<p class="text-black-50 mb-0">ID: {{ current_user.id }}</p>
+                    <p class="text-black-50 mb-0">Email: {{ current_user.email }}</p>
+                    <p class="text-black-50 mb-0">Password Hash: {{ current_user.password }}</p>
+                    <p class="text-black-50 mb-0">Active: {{ current_user.active }}</p>
+                    <p class="text-black-50 mb-0">Last Logged In At: {{ current_user.last_login_at }}</p>
+                    <p class="text-black-50 mb-0">Current Logged In At: {{ current_user.current_login_at }}</p>
+                    <p class="text-black-50 mb-0">Last Logged IP: {{ current_user.last_login_ip }}</p>
+                    <p class="text-black-50 mb-0">Current Logged IP: {{ current_user.current_login_ip }}</p>
+                    <p class="text-black-50 mb-0">Login Count: {{ current_user.login_count }}</p>
+                    <p class="text-black-50 mb-0">Is Authenticated {{ current_user.is_authenticated }}</p>
+                    <p class="text-black-50 mb-0">FS Uniquifer: {{ current_user.fs_uniquifier }}</p>
+                    <p class="text-black-50 mb-0">Confirmed At: {{ current_user.confirmed_at }}</p>
+                    <p class="text-black-50 mb-0">Roles: {{ current_user.roles }}</p>
+                    <p class="text-black-50 mb-0">Username: {{ current_user.username }}</p>
+                    <p class="text-black-50 mb-0">Is Anonymous: {{ current_user.is_anonymous }}</p>
+                    <p class="text-black-50 mb-0">create_datetime: {{ current_user.create_datetime }}</p>
+                    <p class="text-black-50 mb-0">update_datetime: {{ current_user.update_datetime }}</p>
+                    <p class="text-black-50 mb-0">us_totp_secrets: {{ current_user.us_totp_secrets }}</p>
+                    <p class="text-black-50 mb-0">us_phone_number: {{ current_user.us_phone_number }}</p>
+                    <p class="text-black-50 mb-0">tf_primary_method: {{ current_user.tf_primary_method }}</p>
+                    <p class="text-black-50 mb-0">tf_totp_secret: {{ current_user.tf_totp_secret }}</p>
+                    <p class="text-black-50 mb-0">tf_phone_number: {{ current_user.tf_phone_number }}</p>
+                    <p class="text-black-50 mb-0">get_auth_token: {{ current_user.get_auth_token() }}</p>
+                    <p class="text-black-50 mb-0">get_security_payload: {{ current_user.get_security_payload() }}</p>
+                    <p class="text-black-50 mb-0">get_redirect_qparams: {{ current_user.get_redirect_qparams() }}</p>
+                    <p class="text-black-50 mb-0">calc_username: {{ current_user.calc_username() }}</p>
 <section class="projects-section bg-light" id="projects">
     <div class="container">
         <!-- Featured Project Row-->

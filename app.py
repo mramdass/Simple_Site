@@ -17,6 +17,8 @@ try:
 	from sqlalchemy import create_engine, Boolean, DateTime, Column, Integer, String, ForeignKey
 	from sqlalchemy.orm import scoped_session, sessionmaker, relationship, backref
 	from sqlalchemy.ext.declarative import declarative_base
+
+	from datetime import timedelta
 except Exception as e:
 	print(e)
 	exit(1)
@@ -42,9 +44,20 @@ stripped_data = {
 
 app = Flask(__name__)
 
+app.config['SESSION_PERMANENT'] = True
+#app.config['SESSION_TYPE'] = 'sqlalchemy'
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=5)
+app.config['SESSION_FILE_THRESHOLD'] = 5
 
 app.config['SECRET_KEY'] = 'supersecretsquirrel'
 app.config['SECURITY_PASSWORD_SALT'] = '11511711210111411510199114101116115113117105114114101108'
+app.config['SECURITY_TRACKABLE'] = True
+app.config['SECURITY_CONFIRMABLE'] = False # Sends confirmation - would be nice to implement
+app.config['SECURITY_US_ENABLED_METHODS'] = False # Can now be set to True
+app.config['SECURITY_UNIFIED_SIGNIN'] = False
+app.config['SECURITY_TWO_FACTOR'] = False
+#app.config['SECURITY_TWO_FACTOR_ENABLED_METHODS'] = ['sms']
+#app.config['SECURITY_PASSWORD_MIN_LENGTH'] = 12
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://'
 app.config["SQLALCHEMY_ENGINE_OPTIONS"] = { "pool_pre_ping": True }
 
