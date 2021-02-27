@@ -1,5 +1,5 @@
 {% if security.registerable or security.recoverable or security.confirmable or security.unified_signin %}
-<h2>{{ _fsdomain('Menu') }}</h2>
+<h2 class="text-white mb-5">{{ _fsdomain('Menu') }}</h2>
 <ul>
   {% if not skip_login_menu %}
   <li><a href="{{ url_for_security('login') }}{% if 'next' in request.args %}?next={{ request.args.next|urlencode }}{% endif %}">{{ _fsdomain('Login') }}</a></li>

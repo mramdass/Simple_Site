@@ -29,9 +29,14 @@
     },
     "signup-section": {
         "h2": "Create your account now!",
-        "input-1": "Enter name...",
-        "input-2": "Enter email address...",
-        "input-3": "Enter password...",
+        "input-1": "Enter email address...",
+        "input-2": "Enter password...",
+        "input-3": "Confirm password...",
+        "input-4": "Enter First Name...",
+        "input-5": "Enter Middle Name...",
+        "input-6": "Enter Last Name...",
+        "input-7": "Enter Address...",
+        "input-8": "Enter Username...",
         "btn": "Sign Up"
     },
     "contact-section": {

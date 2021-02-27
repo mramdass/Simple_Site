@@ -33,7 +33,8 @@
                         {% else %}
                         <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{{ url_for('index') }}">{{ data['navigation']['li-1'] }}</a></li>
                         <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{{ url_for('security.login') }}">{{ data['navigation']['li-3'] }}</a></li>
-                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{{ url_for('signup') }}">{{ data['navigation']['li-4'] }}</a></li>
+                        <!-- <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{{ url_for('signup') }}">{{ data['navigation']['li-4'] }}</a></li> -->
+                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{{ url_for('security.register') }}">{{ data['navigation']['li-4'] }}</a></li>
                         {% endif %}
                     </ul>
                 </div>

@@ -4,15 +4,19 @@
 # Imports
 
 try:
-	import json, sqlite3
+	import os, json, sqlite3
 	from flask import Flask, Blueprint, g, render_template, redirect, url_for, flash, request
 	#from flask_babelplus import Babel, Domain, gettext
 	from flask_sqlalchemy import SQLAlchemy
-	from flask_security import Security, auth_required, SQLAlchemyUserDatastore, SQLAlchemySessionUserDatastore, current_user, hash_password, UserMixin, RoleMixin
+	
+	from flask_security import Security, auth_required, SQLAlchemyUserDatastore, SQLAlchemySessionUserDatastore, \
+								current_user, hash_password, UserMixin, RoleMixin, RegisterForm
 	from flask_security.models import fsqla_v2 as fsqla
 	
-	#from database import db_session, init_db
-	#from models import User, Role
+	from flask_mail import Mail
+
+	from wtforms import StringField
+	from wtforms.validators import DataRequired
 	
 	from sqlalchemy import create_engine, Boolean, DateTime, Column, Integer, String, ForeignKey
 	from sqlalchemy.orm import scoped_session, sessionmaker, relationship, backref
@@ -26,13 +30,9 @@ except Exception as e:
 
 # Initialization
 
-config = None
-with open('config.json') as f:
-	config = json.load(f)
-	f.close()
-
+HTML_CUSTOM_VALUES_PATH = os.environ.get('HTML_CUSTOM_VALUES_PATH') if os.environ.get('HTML_CUSTOM_VALUES_PATH') is not None else 'data.json'
 data = None
-with open(config['application']['web_data_path']) as f:
+with open(HTML_CUSTOM_VALUES_PATH) as f:
 	data = json.load(f)
 	f.close()
 
@@ -49,22 +49,35 @@ app.config['SESSION_PERMANENT'] = True
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=5)
 app.config['SESSION_FILE_THRESHOLD'] = 5
 
-app.config['SECRET_KEY'] = 'supersecretsquirrel'
-app.config['SECURITY_PASSWORD_SALT'] = '11511711210111411510199114101116115113117105114114101108'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') if os.environ.get('SECRET_KEY') is not None else "os.environ.get('SECRET_KEY')"
+app.config['SECURITY_PASSWORD_SALT'] = os.environ.get('SECURITY_PASSWORD_SALT') if os.environ.get('SECURITY_PASSWORD_SALT') is not None else "os.environ.get('SECURITY_PASSWORD_SALT')"
+app.config['SECURITY_REGISTERABLE'] = True
 app.config['SECURITY_TRACKABLE'] = True
-app.config['SECURITY_CONFIRMABLE'] = False # Sends confirmation - would be nice to implement
-app.config['SECURITY_US_ENABLED_METHODS'] = False # Can now be set to True
+app.config['SECURITY_CONFIRMABLE'] = False # Sends confirmation - In Production, would be nice to implement
+app.config['SECURITY_US_ENABLED_METHODS'] = False # Can now be set to True, app logic to make use of it does not exist
 app.config['SECURITY_UNIFIED_SIGNIN'] = False
 app.config['SECURITY_TWO_FACTOR'] = False
-#app.config['SECURITY_TWO_FACTOR_ENABLED_METHODS'] = ['sms']
-#app.config['SECURITY_PASSWORD_MIN_LENGTH'] = 12
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://'
+#app.config['SECURITY_TWO_FACTOR_ENABLED_METHODS'] = ['mail', 'google_authenticator'] # 'sms' requires sms provider
+app.config['SECURITY_PASSWORD_MIN_LENGTH'] = 12
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI') if os.environ.get('SQLALCHEMY_DATABASE_URI') is not None else 'sqlite://'
 app.config["SQLALCHEMY_ENGINE_OPTIONS"] = { "pool_pre_ping": True }
+app.config.update(
+					MAIL_SERVER=os.environ.get('MAIL_SERVER'), # Tested successfully with 'smtp.gmail.com'
+					MAIL_PORT=int(os.environ.get('MAIL_PORT')) if os.environ.get('MAIL_PORT') is not None else 587,
+					MAIL_USE_SSL=False,
+					MAIL_USERNAME=os.environ.get('MAIL_USERNAME'),
+					MAIL_PASSWORD=os.environ.get('MAIL_PASSWORD'),
+					MAIL_USE_TLS=True, # Recommended
+					DEFAULT_MAIL_SENDER=os.environ.get('DEFAULT_MAIL_SENDER'),
+				)
 
 #babel = Babel(app)
 
+mail = Mail(app)
+
 db = SQLAlchemy(app)
 fsqla.FsModels.set_db_info(db)
+
 
 # Database Logic
 
@@ -72,16 +85,55 @@ class Role(db.Model, fsqla.FsRoleMixin):
     pass
 
 class User(db.Model, fsqla.FsUserMixin):
-    pass
+	first_name = db.Column(db.String(255))
+	middle_name = db.Column(db.String(255))
+	last_name = db.Column(db.String(255))
+	address = db.Column(db.String(255))
+
+	def __init__(self, *args, **kwargs):
+		super(User, self).__init__(*args, **kwargs)
+		self.generate_username() # Assumes that super() does not perform any actions with username
+
+	def generate_username(self):
+		first_char = self.first_name[0]
+		middle_char = ''
+		if self.middle_name  != '' and self.middle_name is not None:
+			middle_char = self.middle_name[0]
+		temp_username = first_char + middle_char + self.last_name
+		
+		user = User.query.filter_by(username=temp_username.lower()).first()
+		collision = 1
+		while user:
+			temp_username = first_char + middle_char + self.last_name + str(collision)
+			user = User.query.filter_by(username=temp_username.lower()).first()
+			collision += 1
+		self.username = temp_username.lower()
+
+
+# Forms
+
+class ExtendedRegisterForm(RegisterForm):
+	first_name = StringField('First Name', [DataRequired()])
+	middle_name = StringField('Middle Name')
+	last_name = StringField('Last Name', [DataRequired()])
+	address = StringField('Address', [DataRequired()])
 
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
-security = Security(app, user_datastore)
+security = Security(app, user_datastore, register_form=ExtendedRegisterForm)
 
 @app.before_first_request
 def create_user():
     db.create_all()
-    if not user_datastore.find_user(email="test@me.com"):
-        user_datastore.create_user(email="test@me.com", password=hash_password("password"))
+    if not user_datastore.find_user(email="snake@charmer.py"):
+        user_datastore.create_user(
+									email="snake@charmer.py",
+									password=hash_password(os.environ.get('USER_1_PASSWORD')) if os.environ.get('USER_1_PASSWORD') is not None else hash_password('password'),
+									first_name='Slithering',
+									middle_name='Snake',
+									last_name='Charmer',
+									address='12 Feet Under Death Valley, CA 92328',
+									#username='sscharmer'
+								)
     db.session.commit()
 
 
@@ -181,4 +233,5 @@ def error(e):
 # Main
 
 if __name__=='__main__':
+	#app.run(debug=True, host='0.0.0.0', ssl_context='adhoc')
 	app.run(debug=True, host='0.0.0.0')
