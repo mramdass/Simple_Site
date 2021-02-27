@@ -1,8 +1,0 @@
-{
-    "database": {
-        "path": "database/database.db"
-    },
-    "application": {
-        "web_data_path": "data.json"
-    }
-}
