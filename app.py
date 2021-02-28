@@ -30,7 +30,7 @@ except Exception as e:
 
 # Initialization
 
-HTML_CUSTOM_VALUES_PATH = os.environ.get('HTML_CUSTOM_VALUES_PATH') if os.environ.get('HTML_CUSTOM_VALUES_PATH') is not None else 'data.json'
+HTML_CUSTOM_VALUES_PATH = os.environ.get('HTML_CUSTOM_VALUES_PATH', 'data.json')
 data = None
 with open(HTML_CUSTOM_VALUES_PATH) as f:
 	data = json.load(f)
@@ -49,8 +49,8 @@ app.config['SESSION_PERMANENT'] = True
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=5)
 app.config['SESSION_FILE_THRESHOLD'] = 5
 
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') if os.environ.get('SECRET_KEY') is not None else "os.environ.get('SECRET_KEY')"
-app.config['SECURITY_PASSWORD_SALT'] = os.environ.get('SECURITY_PASSWORD_SALT') if os.environ.get('SECURITY_PASSWORD_SALT') is not None else "os.environ.get('SECURITY_PASSWORD_SALT')"
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'not for production')
+app.config['SECURITY_PASSWORD_SALT'] = os.environ.get('SECURITY_PASSWORD_SALT', 'not for production')
 app.config['SECURITY_REGISTERABLE'] = True
 app.config['SECURITY_TRACKABLE'] = True
 app.config['SECURITY_CONFIRMABLE'] = False # Sends confirmation - In Production, would be nice to implement
@@ -59,16 +59,16 @@ app.config['SECURITY_UNIFIED_SIGNIN'] = False
 app.config['SECURITY_TWO_FACTOR'] = False
 #app.config['SECURITY_TWO_FACTOR_ENABLED_METHODS'] = ['mail', 'google_authenticator'] # 'sms' requires sms provider
 app.config['SECURITY_PASSWORD_MIN_LENGTH'] = 12
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI') if os.environ.get('SQLALCHEMY_DATABASE_URI') is not None else 'sqlite://'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI', 'sqlite://')
 app.config["SQLALCHEMY_ENGINE_OPTIONS"] = { "pool_pre_ping": True }
 app.config.update(
 					MAIL_SERVER=os.environ.get('MAIL_SERVER'), # Tested successfully with 'smtp.gmail.com'
-					MAIL_PORT=int(os.environ.get('MAIL_PORT')) if os.environ.get('MAIL_PORT') is not None else 587,
+					MAIL_PORT=int(os.environ.get('MAIL_PORT', 587)),
 					MAIL_USE_SSL=False,
 					MAIL_USERNAME=os.environ.get('MAIL_USERNAME'),
 					MAIL_PASSWORD=os.environ.get('MAIL_PASSWORD'),
 					MAIL_USE_TLS=True, # Recommended
-					DEFAULT_MAIL_SENDER=os.environ.get('DEFAULT_MAIL_SENDER'),
+					DEFAULT_MAIL_SENDER=os.environ.get('DEFAULT_MAIL_SENDER', data['head']['title']),
 				)
 
 #babel = Babel(app)
@@ -123,18 +123,22 @@ security = Security(app, user_datastore, register_form=ExtendedRegisterForm)
 
 @app.before_first_request
 def create_user():
-    db.create_all()
-    if not user_datastore.find_user(email="snake@charmer.py"):
-        user_datastore.create_user(
+	db.create_all()
+	print('create_user() is running...')
+	user_datastore.create_role(name='admin')
+	user_datastore.create_role(name='user')
+	user_datastore.create_role(name='loser')
+	if not user_datastore.find_user(email="snake@charmer.py"):
+		user_datastore.create_user(
 									email="snake@charmer.py",
 									password=hash_password(os.environ.get('USER_1_PASSWORD')) if os.environ.get('USER_1_PASSWORD') is not None else hash_password('password'),
 									first_name='Slithering',
 									middle_name='Snake',
 									last_name='Charmer',
 									address='12 Feet Under Death Valley, CA 92328',
-									#username='sscharmer'
+									roles=['admin', 'user']
 								)
-    db.session.commit()
+	db.session.commit()
 
 
 # Views
