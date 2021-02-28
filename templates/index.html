@@ -19,6 +19,7 @@
 {% if current_user.is_authenticated %}
 <!-- Projects-->
 <section class="projects-section bg-light" id="projects">
+    {% if current_user.has_role('admin') %}
     <div class="container">
         <div class="row">
             <div class="col-lg-8 mx-auto">
@@ -31,6 +32,29 @@
             </div>
         </div>
     </div>
+    {% endif %}
+    {% if current_user.has_role('user') %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="text-black mb-4">Hello, {{ current_user.first_name }} {{ current_user.middle_name }} {{current_user.last_name}}</h2>
+                <p class="text-black-50">You're only seeing this website's section because you have the 'user' role.</p>
+        <p>&nbsp;</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% if current_user.has_role('loser') %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="text-black mb-4">Hello, {{ current_user.first_name }} {{current_user.last_name}}</h2>
+                <p class="text-black-50">Your account was deactivated or expired. Please contact your administrator.</p>
+        <p>&nbsp;</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
     <div class="container">
         <!-- Featured Project Row-->
         <div class="row align-items-center no-gutters mb-4 mb-lg-5">
