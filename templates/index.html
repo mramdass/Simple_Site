@@ -19,20 +19,6 @@
 {% if current_user.is_authenticated %}
 <!-- Projects-->
 <section class="projects-section bg-light" id="projects">
-    {% if current_user.has_role('admin') %}
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 mx-auto">
-                <h2 class="text-black mb-4">Flask-Security User Session Attributes</h2>
-                <p class="text-black-50">Because they are interesting...</p>
-                {% for attribute, value in current_user.__dict__.items() %}
-                <p class="text-black-50 mb-0"><b>{{ attribute }}:</b>&emsp;{{ value }}</p>
-                {% endfor %}
-        <p>&nbsp;</p>
-            </div>
-        </div>
-    </div>
-    {% endif %}
     {% if current_user.has_role('user') %}
     <div class="container">
         <div class="row">
@@ -48,8 +34,22 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8 mx-auto">
-                <h2 class="text-black mb-4">Hello, {{ current_user.first_name }} {{current_user.last_name}}</h2>
-                <p class="text-black-50">Your account was deactivated or expired. Please contact your administrator.</p>
+                <h2 class="text-black mb-4">Hello, {{ current_user.first_name }} {{ current_user.middle_name }} {{current_user.last_name}}</h2>
+                <p class="text-black-50">Your account has no roles or was deactivated. Please contact your administrator.</p>
+        <p>&nbsp;</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% if current_user.has_role('admin') %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="text-black mb-4">Flask-Security User Session Attributes</h2>
+                <p class="text-black-50">Because they are interesting...</p>
+                {% for attribute, value in current_user.__dict__.items() %}
+                <p class="text-black-50 mb-0"><b>{{ attribute }}:</b>&emsp;{{ value }}</p>
+                {% endfor %}
         <p>&nbsp;</p>
             </div>
         </div>

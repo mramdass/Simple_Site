@@ -124,21 +124,43 @@ security = Security(app, user_datastore, register_form=ExtendedRegisterForm)
 @app.before_first_request
 def create_user():
 	db.create_all()
-	print('create_user() is running...')
+
 	user_datastore.create_role(name='admin')
 	user_datastore.create_role(name='user')
 	user_datastore.create_role(name='loser')
-	if not user_datastore.find_user(email="snake@charmer.py"):
+
+	if not user_datastore.find_user(email='snake@charmer.py'):
 		user_datastore.create_user(
-									email="snake@charmer.py",
-									password=hash_password(os.environ.get('USER_1_PASSWORD')) if os.environ.get('USER_1_PASSWORD') is not None else hash_password('password'),
+									email='snake@charmer.py',
+									password=hash_password(os.environ.get('USER_1_PASSWORD', 'hiss')),
 									first_name='Slithering',
 									middle_name='Snake',
 									last_name='Charmer',
 									address='12 Feet Under Death Valley, CA 92328',
 									roles=['admin', 'user']
 								)
+	if not user_datastore.find_user(email='cobra@charmer.py'):
+		user_datastore.create_user(
+									email='cobra@charmer.py',
+									password=hash_password(os.environ.get('USER_2_PASSWORD', 'hiss')),
+									first_name='Slithering',
+									middle_name='Cobra',
+									last_name='Charmer',
+									address='6 Feet Under Death Valley, CA 92328',
+									roles=['user']
+								)
+	if not user_datastore.find_user(email='anaconda@charmer.py'):
+		user_datastore.create_user(
+									email='anconda@charmer.py',
+									password=hash_password(os.environ.get('USER_3_PASSWORD', 'hiss')),
+									first_name='Slithering',
+									middle_name='Anaconda',
+									last_name='Charmer',
+									address='3 Feet Under Death Valley, CA 92328',
+									roles=['loser']
+								)
 	db.session.commit()
+
 
 
 # Views
